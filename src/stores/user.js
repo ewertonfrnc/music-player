@@ -16,7 +16,7 @@ export default defineStore('user', {
       const { email, password, name, age, country } = values
 
       const { user } = await createAuthUserWithEmailAndPassword(email, password)
-      createUserDocumentFromAuth(user, { name, age, country })
+      await createUserDocumentFromAuth(user, { name, age, country })
 
       this.user = user
     },
