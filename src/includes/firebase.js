@@ -6,8 +6,25 @@ import {
   signOut,
   signInWithEmailAndPassword
 } from 'firebase/auth'
-import { doc, getDoc, getDocs, setDoc, getFirestore, collection, query } from 'firebase/firestore'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import {
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  getFirestore,
+  collection,
+  query,
+  updateDoc,
+  deleteDoc
+} from 'firebase/firestore'
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
+} from 'firebase/storage'
+import { nanoid } from 'nanoid'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCXi-YWA4ZvPLX5Jy7FvRT7tpF5sUQoC8s',
@@ -87,7 +104,6 @@ export const getUserDocument = async (userUid) => {
 }
 
 export const createSongsDocument = async (song, additionalInformation) => {
-  console.log(song)
   if (!song) return
 
   const songDocRef = doc(db, 'songs', song.uid)
@@ -106,8 +122,47 @@ export const createSongsDocument = async (song, additionalInformation) => {
       console.log('Erro ao adicionar música', error.message)
     }
   }
-  console.log(songDocRef)
+
   return songDocRef
+}
+
+export const updateSongDocument = async (songUid, values) => {
+  const songDocRef = doc(db, 'songs', songUid)
+  await updateDoc(songDocRef, { ...values })
+}
+
+export const getSongDocuments = async () => {
+  // query the songs collection
+  const collectionRef = collection(db, 'songs')
+  const q = query(collectionRef)
+
+  // get all songs documents
+  const querySnapshot = await getDocs(q)
+
+  let songs = []
+  querySnapshot.forEach((docSnapshot) => {
+    const song = {
+      docId: docSnapshot.id,
+      ...docSnapshot.data()
+    }
+
+    songs.push(song)
+  })
+
+  return songs
+}
+
+export const deleteSongFromDatabase = async (song) => {
+  // query the songs collection
+  const collectionRef = collection(db, 'songs')
+  const q = query(collectionRef)
+
+  // get all songs documents
+  const querySnapshot = await getDocs(q)
+
+  querySnapshot.forEach((doc) => {
+    if (song.uid === doc.ref.id) deleteDoc(doc.ref)
+  })
 }
 
 ///////////////////////////
@@ -141,7 +196,7 @@ export const musicUpload = (file, uploadsArr, user) => {
     async () => {
       const userData = await getUserDocument(user.uid)
       const song = {
-        uid: user.uid,
+        uid: nanoid(),
         displayName: userData.name || '',
         originalName: uploadTask.snapshot.ref.name,
         modifiedName: uploadTask.snapshot.ref.name,
@@ -156,4 +211,9 @@ export const musicUpload = (file, uploadsArr, user) => {
       uploadsArr[uploadIndex].textClass = 'text-green-400'
     }
   )
+}
+
+export const deleteSongFromStorage = async (song) => {
+  const songRef = ref(storage, `songs/${song.originalName}`)
+  await deleteObject(songRef)
 }

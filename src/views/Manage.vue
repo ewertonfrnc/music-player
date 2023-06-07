@@ -12,89 +12,16 @@
             <span class="card-title">Minhas músicas</span>
             <i class="fa fa-compact-disc float-right text-green-400 text-2xl"></i>
           </div>
+
           <div class="p-6">
-            <!-- Composition Items -->
-            <div class="border border-gray-200 p-3 mb-4 rounded">
-              <div>
-                <h4 class="inline-block text-2xl font-bold">Nome da música</h4>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
-                  <i class="fa fa-times"></i>
-                </button>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right">
-                  <i class="fa fa-pencil-alt"></i>
-                </button>
-              </div>
-              <div>
-                <form>
-                  <div class="mb-3">
-                    <label class="inline-block mb-2">Título</label>
-                    <input
-                      type="text"
-                      class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                      placeholder="Insira o título da música"
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label class="inline-block mb-2">Gênero</label>
-                    <input
-                      type="text"
-                      class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                      placeholder="Insira o Gênero da música"
-                    />
-                  </div>
-                  <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600">
-                    Salvar
-                  </button>
-                  <button type="button" class="py-1.5 px-3 rounded text-white bg-gray-600">
-                    Cancelar
-                  </button>
-                </form>
-              </div>
-            </div>
-            <div class="border border-gray-200 p-3 mb-4 rounded">
-              <div>
-                <h4 class="inline-block text-2xl font-bold">Nome da música</h4>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
-                  <i class="fa fa-times"></i>
-                </button>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right">
-                  <i class="fa fa-pencil-alt"></i>
-                </button>
-              </div>
-            </div>
-            <div class="border border-gray-200 p-3 mb-4 rounded">
-              <div>
-                <h4 class="inline-block text-2xl font-bold">Nome da música</h4>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
-                  <i class="fa fa-times"></i>
-                </button>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right">
-                  <i class="fa fa-pencil-alt"></i>
-                </button>
-              </div>
-            </div>
-            <div class="border border-gray-200 p-3 mb-4 rounded">
-              <div>
-                <h4 class="inline-block text-2xl font-bold">Nome da música</h4>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
-                  <i class="fa fa-times"></i>
-                </button>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right">
-                  <i class="fa fa-pencil-alt"></i>
-                </button>
-              </div>
-            </div>
-            <div class="border border-gray-200 p-3 mb-4 rounded">
-              <div>
-                <h4 class="inline-block text-2xl font-bold">Nome da música</h4>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right">
-                  <i class="fa fa-times"></i>
-                </button>
-                <button class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right">
-                  <i class="fa fa-pencil-alt"></i>
-                </button>
-              </div>
-            </div>
+            <CompositionItem
+              v-for="(song, index) in songs"
+              :key="song.docId"
+              :song="song"
+              :updateSong="updateSong"
+              :index="index"
+              :removeSong="removeSong"
+            />
           </div>
         </div>
       </div>
@@ -104,11 +31,32 @@
 
 <script>
 import Upload from '../components/Upload.vue'
+import CompositionItem from '../components/CompositionItem.vue'
+
+import { getSongDocuments } from '../includes/firebase'
 
 export default {
   name: 'Manage',
   components: {
-    Upload
+    Upload,
+    CompositionItem
+  },
+  data() {
+    return {
+      songs: []
+    }
+  },
+  methods: {
+    updateSong(index, values) {
+      this.songs[index].modifiedName = values.modifiedName
+      this.songs[index].genre = values.genre
+    },
+    removeSong(index) {
+      this.songs.splice(index, 1)
+    }
+  },
+  async created() {
+    this.songs = await getSongDocuments()
   },
   beforeRouteLeave(to, from, next) {
     this.$refs.upload.cancelUploads()

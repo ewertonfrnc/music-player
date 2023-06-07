@@ -41,7 +41,7 @@ export default {
             required: `Este campo é obrigatório.`,
             min_value: `O valor está abaixo do permitido.`,
             maxValue: `O valor está acima do permitido.`,
-            açpha_spaces: `Este campo permite apenas caracteres alfabéticos.`,
+            alpha_spaces: `Este campo permite apenas caracteres alfabéticos.`,
             passwords_mismatch: 'As senhas não são iguais.',
             tos: 'Você precisa aceitar os termos de uso. '
           },
