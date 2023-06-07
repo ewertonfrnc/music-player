@@ -28,6 +28,7 @@
           <VeeField
             type="text"
             name="modifiedName"
+            @input="updateUnsavedFlag(true)"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Insira o título da música"
           />
@@ -39,6 +40,7 @@
           <VeeField
             type="text"
             name="genre"
+            @input="updateUnsavedFlag(true)"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Insira o Gênero da música"
           />
@@ -90,6 +92,9 @@ export default {
     removeSong: {
       type: Function,
       required: true
+    },
+    updateUnsavedFlag: {
+      type: Function
     }
   },
   data() {
@@ -123,6 +128,7 @@ export default {
       }
 
       this.updateSong(this.index, values)
+      this.updateUnsavedFlag(false)
 
       this.inSubmission = false
       this.alertVariant = 'bg-green-500'

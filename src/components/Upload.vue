@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { musicUpload, createSongsDocument } from '../includes/firebase'
+import { musicUpload } from '../includes/firebase'
 import useUserStore from '../stores/user'
 import { mapState } from 'pinia'
 
@@ -57,6 +57,7 @@ export default {
       uploads: []
     }
   },
+  props: ['addSong'],
   computed: {
     ...mapState(useUserStore, ['user'])
   },
@@ -67,7 +68,7 @@ export default {
       const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files]
       files.forEach((file) => {
         if (file.type !== 'audio/mpeg') return
-        musicUpload(file, this.uploads, this.user)
+        musicUpload(file, this.uploads, this.user, this.addSong)
       })
     },
     cancelUploads() {

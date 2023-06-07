@@ -3,7 +3,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <Upload ref="upload" />
+        <Upload ref="upload" :addSong="addSong" />
       </div>
 
       <div class="col-span-2">
@@ -21,6 +21,7 @@
               :updateSong="updateSong"
               :index="index"
               :removeSong="removeSong"
+              :updateUnsavedFlag="updateUnsavedFlag"
             />
           </div>
         </div>
@@ -43,7 +44,8 @@ export default {
   },
   data() {
     return {
-      songs: []
+      songs: [],
+      unsavedFlag: false
     }
   },
   methods: {
@@ -53,14 +55,23 @@ export default {
     },
     removeSong(index) {
       this.songs.splice(index, 1)
+    },
+    async addSong() {
+      this.songs = await getSongDocuments()
+    },
+    updateUnsavedFlag(value) {
+      this.unsavedFlag = value
     }
   },
   async created() {
-    this.songs = await getSongDocuments()
+    this.addSong()
   },
   beforeRouteLeave(to, from, next) {
-    this.$refs.upload.cancelUploads()
-    next()
+    if (!this.unsavedFlag) next()
+    else {
+      const leave = confirm('Você tem alterações não salvas. Tem certeza que deseja sair?')
+      next(leave)
+    }
   }
 }
 </script>

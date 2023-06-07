@@ -167,7 +167,7 @@ export const deleteSongFromDatabase = async (song) => {
 
 ///////////////////////////
 // STORAGE
-export const musicUpload = (file, uploadsArr, user) => {
+export const musicUpload = (file, uploadsArr, user, updateSongList) => {
   const songsRef = ref(storage, `songs/${file.name}`)
   const uploadTask = uploadBytesResumable(songsRef, file)
 
@@ -204,7 +204,8 @@ export const musicUpload = (file, uploadsArr, user) => {
         commentCount: 0
       }
       song.url = await getDownloadURL(uploadTask.snapshot.ref)
-      await createSongsDocument(song)
+      const songRef = await createSongsDocument(song)
+      updateSongList(songRef)
 
       uploadsArr[uploadIndex].variant = 'bg-green-400'
       uploadsArr[uploadIndex].icon = 'fas fa-check'
