@@ -20,6 +20,9 @@
       >
         <h5>Clique ou arraste suas músicas aqui</h5>
       </div>
+
+      <input type="file" multiple @change="upload($event)" />
+
       <hr class="my-6" />
 
       <!-- Progess Bars -->
@@ -61,11 +64,14 @@ export default {
     upload($event) {
       this.isDragOver = false
 
-      const files = [...$event.dataTransfer.files]
+      const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files]
       files.forEach((file) => {
         if (file.type !== 'audio/mpeg') return
         musicUpload(file, this.uploads, this.user)
       })
+    },
+    cancelUploads() {
+      this.uploads.forEach((upload) => upload.uploadTask.cancel())
     }
   }
 }
