@@ -15,7 +15,10 @@ import {
   collection,
   query,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  limit,
+  startAfter,
+  orderBy
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -131,13 +134,26 @@ export const updateSongDocument = async (songUid, values) => {
   await updateDoc(songDocRef, { ...values })
 }
 
-export const getSongDocuments = async () => {
+export const getSongDocuments = async (
+  songsArr,
+  maxPerPage,
+  getLastDocRef,
+  lastDocRef,
+  handleScroll
+) => {
   // query the songs collection
   const collectionRef = collection(db, 'songs')
-  const q = query(collectionRef)
+  const q = query(
+    collectionRef,
+    orderBy('modifiedName'),
+    startAfter(lastDocRef || 0),
+    limit(maxPerPage)
+  )
 
   // get all songs documents
   const querySnapshot = await getDocs(q)
+  getLastDocRef(querySnapshot.docs[querySnapshot.docs.length - 1])
+  handleScroll(querySnapshot.empty)
 
   let songs = []
   querySnapshot.forEach((docSnapshot) => {
@@ -149,6 +165,7 @@ export const getSongDocuments = async () => {
     songs.push(song)
   })
 
+  songs = [...songsArr, ...songs]
   return songs
 }
 
