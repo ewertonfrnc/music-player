@@ -82,7 +82,7 @@
         <!-- Comment Author -->
         <div class="mb-5">
           <div class="font-bold">{{ comment.name }}</div>
-          <time>{{ comment.datePosted }}</time>
+          <time>{{ formatDate(new Date(comment.datePosted)) }}</time>
         </div>
 
         <p>
@@ -175,6 +175,9 @@ export default {
     },
     async getComments() {
       this.comments = await getAllComments(this.$route.params.id)
+    },
+    formatDate(date) {
+      return new Intl.DateTimeFormat('en-US', { timeStyle: 'medium' }).format(date)
     }
   },
   watch: {
