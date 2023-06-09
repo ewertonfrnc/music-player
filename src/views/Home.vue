@@ -7,11 +7,12 @@
       ></div>
       <div class="container mx-auto">
         <div class="text-white main-header-content">
-          <h1 class="font-bold text-5xl mb-5">Ouça suas músicas favoritas!</h1>
+          <h1 class="font-bold text-5xl mb-5">Ouça suas músicas favoritas</h1>
           <p class="w-full md:w-8/12 mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et dolor mollis,
-            congue augue non, venenatis elit. Nunc justo eros, suscipit ac aliquet imperdiet,
-            venenatis et sapien. Duis sed magna pulvinar, fringilla lorem eget, ullamcorper urna.
+            Viva a trilha sonora da sua vida com o Musicly! Transforme cada momento em uma
+            experiência musical inesquecível. Seja o protagonista da sua própria jornada sonora e
+            compartilhe sua vibe com o mundo. Mergulhe em um oceano de batidas envolventes e
+            deixe-se levar pelo ritmo.
           </p>
         </div>
       </div>

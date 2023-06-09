@@ -18,7 +18,7 @@
         @dragleave.prevent="isDragOver = false"
         @drop.prevent="upload($event)"
       >
-        <h5>Clique ou arraste suas músicas aqui</h5>
+        <h5>Arraste suas músicas aqui</h5>
       </div>
 
       <input type="file" multiple @change="upload($event)" />
