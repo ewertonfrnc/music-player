@@ -90,34 +90,6 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
   return userDocRef
 }
 
-export const getUserDocument = async (userUid) => {
-  // query the users collection
-  const collectionRef = collection(db, 'users')
-  const q = query(collectionRef)
-
-  // get all users documents
-  const querySnapshot = await getDocs(q)
-
-  let userData
-  querySnapshot.forEach((docSnapshot) => {
-    if (docSnapshot.id === userUid) userData = docSnapshot.data()
-  })
-
-  return userData
-}
-
-export const getSongDocument = async (songId, router) => {
-  const songDocRef = doc(db, 'songs', songId)
-  const songSnapshot = await getDoc(songDocRef)
-
-  if (!songSnapshot.exists()) {
-    router.push({ name: 'home' })
-    return
-  }
-
-  return songSnapshot.data()
-}
-
 export const createSongsDocument = async (song, additionalInformation) => {
   if (!song) return
 
@@ -141,9 +113,23 @@ export const createSongsDocument = async (song, additionalInformation) => {
   return songDocRef
 }
 
-export const updateSongDocument = async (songUid, values) => {
-  const songDocRef = doc(db, 'songs', songUid)
-  await updateDoc(songDocRef, { ...values })
+export const createCommentDocument = async (comment) => {
+  if (!comment) return
+
+  const commentDocRef = doc(db, 'comments', comment.uid)
+  const commentSnapshot = await getDoc(commentDocRef)
+
+  if (!commentSnapshot.exists()) {
+    try {
+      await setDoc(commentDocRef, {
+        ...comment
+      })
+    } catch (error) {
+      console.log('Erro ao adicionar música', error.message)
+    }
+  }
+
+  return commentDocRef
 }
 
 export const getSongDocuments = async (
@@ -183,6 +169,51 @@ export const getSongDocuments = async (
   return songs
 }
 
+export const getAllComments = async (routeId) => {
+  let comments = []
+
+  const commentsRef = collection(db, 'comments')
+  const q = query(commentsRef, where('songId', '==', routeId))
+
+  const commentSnapshot = await getDocs(q)
+  commentSnapshot.forEach((comment) => comments.push(comment.data()))
+
+  return comments
+}
+
+export const getUserDocument = async (userUid) => {
+  // query the users collection
+  const collectionRef = collection(db, 'users')
+  const q = query(collectionRef)
+
+  // get all users documents
+  const querySnapshot = await getDocs(q)
+
+  let userData
+  querySnapshot.forEach((docSnapshot) => {
+    if (docSnapshot.id === userUid) userData = docSnapshot.data()
+  })
+
+  return userData
+}
+
+export const getSongDocument = async (songId, router) => {
+  const songDocRef = doc(db, 'songs', songId)
+  const songSnapshot = await getDoc(songDocRef)
+
+  if (!songSnapshot.exists()) {
+    router.push({ name: 'home' })
+    return
+  }
+
+  return songSnapshot.data()
+}
+
+export const updateSongDocument = async (songUid, values) => {
+  const songDocRef = doc(db, 'songs', songUid)
+  await updateDoc(songDocRef, { ...values })
+}
+
 export const deleteSongFromDatabase = async (song) => {
   // query the songs collection
   const collectionRef = collection(db, 'songs')
@@ -194,37 +225,6 @@ export const deleteSongFromDatabase = async (song) => {
   querySnapshot.forEach((doc) => {
     if (song.uid === doc.ref.id) deleteDoc(doc.ref)
   })
-}
-
-export const createCommentDocument = async (comment) => {
-  if (!comment) return
-
-  const commentDocRef = doc(db, 'comments', comment.uid)
-  const commentSnapshot = await getDoc(commentDocRef)
-
-  if (!commentSnapshot.exists()) {
-    try {
-      await setDoc(commentDocRef, {
-        ...comment
-      })
-    } catch (error) {
-      console.log('Erro ao adicionar música', error.message)
-    }
-  }
-
-  return commentDocRef
-}
-
-export const getAllComments = async (routeId) => {
-  let comments = []
-
-  const commentsRef = collection(db, 'comments')
-  const q = query(commentsRef, where('songId', '==', routeId))
-
-  const commentSnapshot = await getDocs(q)
-  commentSnapshot.forEach((comment) => comments.push(comment.data()))
-
-  return comments
 }
 
 ///////////////////////////
