@@ -9,6 +9,7 @@
     <div class="container mx-auto flex items-center">
       <!-- Play/Pause Button -->
       <button
+        @click.prevent="playerStore.newSong(song)"
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
       >
@@ -98,8 +99,9 @@ import {
   getAllComments,
   updateSongDocument
 } from '../includes/firebase'
-import { mapState } from 'pinia'
+import { mapState, mapStores } from 'pinia'
 import useUserStore from '../stores/user'
+import usePlayerStore from '../stores/player'
 import { nanoid } from 'nanoid'
 
 export default {
@@ -120,6 +122,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ['user']),
+    ...mapStores(usePlayerStore),
     sortedComments() {
       return this.comments
         .slice()
