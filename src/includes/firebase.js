@@ -18,7 +18,8 @@ import {
   deleteDoc,
   limit,
   startAfter,
-  orderBy
+  orderBy,
+  where
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -65,7 +66,6 @@ export const signOutUser = async () => await signOut(auth)
 ///////////////////////////
 // DATABASE
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation) => {
-  console.log(userAuth, additionalInformation)
   if (!userAuth) return
 
   const userDocRef = doc(db, 'users', userAuth.uid)
@@ -106,6 +106,18 @@ export const getUserDocument = async (userUid) => {
   return userData
 }
 
+export const getSongDocument = async (songId, router) => {
+  const songDocRef = doc(db, 'songs', songId)
+  const songSnapshot = await getDoc(songDocRef)
+
+  if (!songSnapshot.exists()) {
+    router.push({ name: 'home' })
+    return
+  }
+
+  return songSnapshot.data()
+}
+
 export const createSongsDocument = async (song, additionalInformation) => {
   if (!song) return
 
@@ -135,7 +147,7 @@ export const updateSongDocument = async (songUid, values) => {
 }
 
 export const getSongDocuments = async (
-  songsArr,
+  songsArr = [],
   maxPerPage,
   getLastDocRef,
   lastDocRef,
@@ -150,10 +162,12 @@ export const getSongDocuments = async (
     limit(maxPerPage)
   )
 
-  // get all songs documents
   const querySnapshot = await getDocs(q)
-  getLastDocRef(querySnapshot.docs[querySnapshot.docs.length - 1])
-  handleScroll(querySnapshot.empty)
+
+  if (getLastDocRef) {
+    getLastDocRef(querySnapshot.docs[querySnapshot.docs.length - 1])
+    handleScroll(querySnapshot.empty)
+  }
 
   let songs = []
   querySnapshot.forEach((docSnapshot) => {
@@ -180,6 +194,37 @@ export const deleteSongFromDatabase = async (song) => {
   querySnapshot.forEach((doc) => {
     if (song.uid === doc.ref.id) deleteDoc(doc.ref)
   })
+}
+
+export const createCommentDocument = async (comment) => {
+  if (!comment) return
+
+  const commentDocRef = doc(db, 'comments', comment.uid)
+  const commentSnapshot = await getDoc(commentDocRef)
+
+  if (!commentSnapshot.exists()) {
+    try {
+      await setDoc(commentDocRef, {
+        ...comment
+      })
+    } catch (error) {
+      console.log('Erro ao adicionar música', error.message)
+    }
+  }
+
+  return commentDocRef
+}
+
+export const getAllComments = async (routeId) => {
+  let comments = []
+
+  const commentsRef = collection(db, 'comments')
+  const q = query(commentsRef, where('songId', '==', routeId))
+
+  const commentSnapshot = await getDocs(q)
+  commentSnapshot.forEach((comment) => comments.push(comment.data()))
+
+  return comments
 }
 
 ///////////////////////////
