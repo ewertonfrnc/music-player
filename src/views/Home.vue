@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       songs: [],
-      maxPerPage: 4,
+      maxPerPage: 5,
       pendingRequest: false,
       lastDocRef: null
     }
