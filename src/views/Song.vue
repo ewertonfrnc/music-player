@@ -27,7 +27,7 @@
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
-        <span class="card-title">Comentários (15)</span>
+        <span class="card-title">Comentários ({{ song.commentCount }})</span>
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
 
@@ -95,7 +95,8 @@ import {
   getSongDocument,
   createCommentDocument,
   getUserDocument,
-  getAllComments
+  getAllComments,
+  updateSongDocument
 } from '../includes/firebase'
 import { mapState } from 'pinia'
 import useUserStore from '../stores/user'
@@ -157,6 +158,8 @@ export default {
         this.commentAlertMessage = 'Algo deu errado! Tente novamente mais tarde.'
       }
 
+      this.song.commentCount += 1
+      await updateSongDocument(this.$route.params.id, { commentCount: this.song.commentCount })
       this.getComments()
 
       resetForm()
