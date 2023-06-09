@@ -24,6 +24,7 @@ Musicly is a music player app built to practice my frontend skills with the foll
 ## Installation
 
 Musicly requires [Node.js](https://nodejs.org/) v16+ to run.
+
 Install the dependencies and devDependencies and start the server.
 
 ```sh
