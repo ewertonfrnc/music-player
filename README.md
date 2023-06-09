@@ -1,57 +1,39 @@
-# music-player
+# MUSICLY
 
-This template should help get you started developing with Vue 3 in Vite.
+---
 
-## Recommended IDE Setup
+![app preview](https://i.imgur.com/w743GT2.gif)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Musicly is a music player app built to practice my frontend skills with the following technologies:
 
-## Customize configuration
+- [VueJs] - The Progressive JavaScript Framework;
+- [Vue Router] - The official Router for Vue.js;
+- [Pinia] - The intuitive store for Vue.js;
+- [HowlerJs] - Audio library for the modern web;
+- [Firebase] - Backend cloud computing services and application development platforms provided by Google.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Features
 
-## Project Setup
+- Import musics from your device into the cloud;
+- Drag and drop songs to import;
+- Create an account to save your songs in the cloud;
+- Listen to uploaded songs;
+- Share with your friends and add comments to a song;
+- Edit the song name and genre.
+
+## Installation
+
+Musicly requires [Node.js](https://nodejs.org/) v16+ to run.
+Install the dependencies and devDependencies and start the server.
 
 ```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+npm i
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+[//]: # "These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax"
+[VueJs]: https://vuejs.org
+[Vue Router]: https://router.vuejs.org
+[HowlerJs]: https://howlerjs.com
+[Pinia]: https://pinia.vuejs.org
+[Firebase]: https://firebase.google.com
