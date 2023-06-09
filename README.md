@@ -1,7 +1,5 @@
 # MUSICLY
 
----
-
 ![app preview](https://i.imgur.com/w743GT2.gif)
 
 Musicly is a music player app built to practice my frontend skills with the following technologies:
