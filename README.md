@@ -7,6 +7,7 @@ Musicly is a music player app built to practice my frontend skills with the foll
 - [VueJs] - The Progressive JavaScript Framework;
 - [Vue Router] - The official Router for Vue.js;
 - [Pinia] - The intuitive store for Vue.js;
+- [Tailwindcss] - A utility-first CSS framework;
 - [HowlerJs] - Audio library for the modern web;
 - [Firebase] - Backend cloud computing services and application development platforms provided by Google.
 
@@ -36,3 +37,4 @@ npm run dev
 [HowlerJs]: https://howlerjs.com
 [Pinia]: https://pinia.vuejs.org
 [Firebase]: https://firebase.google.com
+[Tailwindcss]: https://tailwindcss.com
