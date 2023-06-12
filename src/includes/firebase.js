@@ -19,7 +19,9 @@ import {
   limit,
   startAfter,
   orderBy,
-  where
+  where,
+  initializeFirestore,
+  CACHE_SIZE_UNLIMITED
 } from 'firebase/firestore'
 import {
   getStorage,
@@ -41,6 +43,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
+initializeFirestore(app, { cache: CACHE_SIZE_UNLIMITED })
 
 export const auth = getAuth(app)
 export const db = getFirestore(app)
